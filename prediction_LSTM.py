@@ -8,8 +8,8 @@ import get_data
 import math
 
 
-# # in case we want to crease a new data set
-# get_data.create_dataset()
+# in case we want to crease a new data set
+get_data.create_dataset()
 
 look_back = 10
 look_next = 1
@@ -17,7 +17,7 @@ trainX, trainY, testX, testY = get_data.get_data(look_back, is_reshape=True)
 
 # create and fit the LSTM network
 batch_size = 4
-epochs = 10
+epochs = 100
 model = Sequential()
 
 model.add(LSTM(10, input_shape=(32, look_back), activation='selu'))

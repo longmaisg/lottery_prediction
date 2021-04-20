@@ -63,8 +63,8 @@ def create_dataset():
     np.savetxt("dates.txt", np.array(dates), fmt='%s')
     np.savetxt("numbers.txt", numbers)
 
-    for i in range(len(dates)):
-        print(dates[i], "\t\t", numbers[i])
+    # for i in range(len(dates)):
+    #     print(dates[i], "\t\t", numbers[i])
 
 
 def get_data(look_back=1, look_next=1, train_ratio=0.8, is_reshape=False):
