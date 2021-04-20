@@ -8,13 +8,16 @@ import get_data
 import math
 
 
+# # in case we want to crease a new data set
+# get_data.create_dataset()
+
 look_back = 10
 look_next = 1
 trainX, trainY, testX, testY = get_data.get_data(look_back, is_reshape=True)
 
 # create and fit the LSTM network
 batch_size = 4
-epochs = 50
+epochs = 10
 model = Sequential()
 
 model.add(LSTM(10, input_shape=(32, look_back), activation='selu'))
@@ -40,3 +43,31 @@ testScore = math.sqrt(mean_squared_error(testY, testPredict))
 print('Test Score: %.2f RMSE' % (testScore))
 
 # print(np.round(trainPredict[:5], 3))
+
+# get the predicted lottery numbers
+num_overlap = []
+for i in range(len(testY)):
+    arg_sort = np.argsort(-testPredict[i])
+    numberPredict = np.zeros(32)    # there are 32 numbers
+    for j in range(5):              # choose 5 numbers with the highest possibility
+        numberPredict[arg_sort[j]] = 1
+
+    # find how many numbers overlapped with the true winning numbers
+    num_overlap.append(np.sum(numberPredict * testY[i]))
+
+num_overlap = np.array(num_overlap)
+
+print("\nhow many predictions with at least 2 numbers overlapped over total %d number?" % len(testY))
+print(np.sum(num_overlap >= 2))
+
+print("\nhow many predictions with at least 3 numbers overlapped over total %d number?" % len(testY))
+print(np.sum(num_overlap >= 3))
+
+print("\nhow many predictions with at least 4 numbers overlapped over total %d number?" % len(testY))
+print(np.sum(num_overlap >= 4))
+
+# predict a number for tomorrow
+testPredict = model.predict(testX[-10:])
+arg_sort = np.argsort(-testPredict[0])
+print("Prediction for tomorrow:")
+print(arg_sort[:5])

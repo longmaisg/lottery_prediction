@@ -91,8 +91,8 @@ def get_data(look_back=1, look_next=1, train_ratio=0.8, is_reshape=False):
     train_size = int(len(dataY) * train_ratio)
     trainX = dataX[:train_size]
     trainY = dataY[:train_size]
-    testX = dataX[-train_size:]
-    testY = dataY[-train_size:]
+    testX = dataX[train_size:]
+    testY = dataY[train_size:]
 
     return trainX, trainY, testX, testY
 
