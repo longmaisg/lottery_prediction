@@ -63,11 +63,13 @@ def create_dataset():
     np.savetxt("dates.txt", np.array(dates), fmt='%s')
     np.savetxt("numbers.txt", numbers)
 
+    print("save data set to files")
+
     # for i in range(len(dates)):
     #     print(dates[i], "\t\t", numbers[i])
 
 
-def get_data(look_back=1, look_next=1, train_ratio=0.8, is_reshape=False):
+def get_data(look_back=1, look_next=1, num_numbers_chosen=32, train_ratio=0.8, is_reshape=False):
     # dates = np.loadtxt("dates.txt")
     numbers = np.loadtxt("numbers.txt")
 
@@ -76,6 +78,8 @@ def get_data(look_back=1, look_next=1, train_ratio=0.8, is_reshape=False):
         for j in range(len(numbers[i])):
             index = int(numbers[i, j]) - 1  # 0 to 31 equivalent to 1-32
             dataset[i, index] = 1.
+
+    dataset = dataset[:, :num_numbers_chosen]
 
     dataX, dataY = [], []
     for i in range(0, len(dataset) - look_back - look_next, look_next):
@@ -86,9 +90,10 @@ def get_data(look_back=1, look_next=1, train_ratio=0.8, is_reshape=False):
     dataX = np.array(dataX)
     dataY = np.array(dataY)
     if is_reshape:
-        dataX = np.reshape(dataX, (dataX.shape[0], 32, dataX.shape[1]))
+        dataX = np.reshape(dataX, (dataX.shape[0], num_numbers_chosen, dataX.shape[1]))
         # dataX = np.reshape(dataX, (dataX.shape[0], dataX.shape[1], 32))
-    train_size = int(len(dataY) * train_ratio)
+    # train_size = int(len(dataY) * train_ratio)
+    train_size = len(dataY) - 100
     trainX = dataX[:train_size]
     trainY = dataY[:train_size]
     testX = dataX[train_size:]
