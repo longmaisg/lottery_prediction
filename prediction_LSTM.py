@@ -18,19 +18,19 @@ trainX, trainY, testX, testY = get_data.get_data(look_back, num_numbers_chosen=n
 
 # create and fit the LSTM network
 batch_size = 4
-epochs = 1
+epochs = 10
 model = Sequential()
 
-model.add(LSTM(1000, input_shape=(num_numbers_chosen, look_back), activation='elu'))
+model.add(LSTM(10, input_shape=(num_numbers_chosen, look_back), activation='elu'))
 # model.add(LSTM(32, input_shape=(1, look_back), return_sequences=True))
 # model.add(Dropout(0.2))
 # model.add(LSTM(32))
 # model.add(Dense(1000, activation='elu'))
 # model.add(Dropout(0.2))
 # # model.add(Dense(1000, activation='selu'))
-model.add(Dense(num_numbers_chosen, activation='elu'))
+model.add(Dense(num_numbers_chosen, activation='sigmoid'))
 
-opt = Adam(learning_rate=1e-2)
+opt = Adam(learning_rate=1e-3)
 model.compile(loss='binary_crossentropy', optimizer=opt)
 history = model.fit(trainX, trainY, epochs=epochs, batch_size=batch_size, verbose=2)
 
@@ -48,7 +48,7 @@ print('Test Score: %.2f RMSE' % (testScore))
 # print(np.round(trainPredict[:5], 3))
 
 # get the predicted lottery numbers
-num_numbers_predict = 10
+num_numbers_predict = 5
 if num_numbers_predict >= num_numbers_chosen: num_numbers_predict = num_numbers_chosen
 num_overlap = []
 for i in range(len(testY)):
